@@ -1,0 +1,6 @@
+coverage
+build
+__tests__
+deploy
+node_modules
+
