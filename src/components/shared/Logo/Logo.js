@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
+
 import colors from '../../../setup/colors';
 
 const Logo = props => (
@@ -32,6 +34,14 @@ const Container = styled.div`
     font-style: italic;
   }
 `;
+
+Logo.propTypes = {
+  headerMode: PropTypes.bool,
+};
+
+Logo.defaultProps = {
+  headerMode: false,
+};
 
 export default Logo;
 
