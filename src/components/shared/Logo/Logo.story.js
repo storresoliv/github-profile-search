@@ -6,4 +6,5 @@ const stories = storiesOf('shared/Logo', module);
 
 stories
   .add('default', () => <Logo />)
+  .add('headerMode', () => <Logo headerMode />);
 
