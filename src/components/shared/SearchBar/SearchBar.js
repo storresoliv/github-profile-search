@@ -11,6 +11,7 @@ class SearchBar extends React.Component {
     onChange: PropTypes.func,
     value: PropTypes.string,
     style: PropTypes.object,
+    disabled: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -18,11 +19,15 @@ class SearchBar extends React.Component {
     onChange: () => null,
     value: '',
     style: {},
+    disabled: false,
   };
 
   constructor(props) {
     super(props);
-    this.state = { value: props.value };
+    this.state = {
+      value: props.value,
+      disabled: props.disabled,
+    };
   }
 
   onChange = (e) => {
@@ -40,6 +45,13 @@ class SearchBar extends React.Component {
     onSearch(value);
   }
 
+  componentDidUpdated(nextProps) {
+    const { disabled } = nextProps;
+    if (disabled !== this.state.disabled) {
+      this.setState({ disabled });
+    }
+  }
+
   render() {
     return (
       <Container style={this.props.style}>
@@ -48,8 +60,9 @@ class SearchBar extends React.Component {
           type="search"
           onChange={this.onChange}
           value={this.state.value}
+          disabled={this.state.disabled}
         />
-        <Button onClick={this.onSearch}>
+        <Button onClick={this.onSearch} disabled={this.state.disabled}>
           <img src={SearchIcon} alt="Search Icon" />
         </Button>
       </Container>

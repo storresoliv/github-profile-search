@@ -6,6 +6,8 @@ import SearchBar from '.';
 const stories = storiesOf('shared/SearchBar', module);
 
 const props = {
+  style: {},
+  value: '',
   onChange: action('onChange Action'),
   onSearch: action('onSearch Action'),
 };

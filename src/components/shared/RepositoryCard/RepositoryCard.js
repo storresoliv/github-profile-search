@@ -24,6 +24,7 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.p`
@@ -47,7 +48,7 @@ const StarsContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 8px;
 `;
 
 const Stars = styled.span`
@@ -59,9 +60,9 @@ const Stars = styled.span`
 `;
 
 RepositoryCard.propTypes = {
-  title: PropTypes.string,
-  description: PropTypes.string,
-  stars: PropTypes.number,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  stars: PropTypes.number.isRequired,
 };
 
 export default RepositoryCard;

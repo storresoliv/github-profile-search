@@ -4,6 +4,13 @@ import { spy } from 'sinon';
 
 import SearchBar from '.';
 
+const props = {
+  onChange: jest.fn(),
+  onSearch: jest.fn(),
+  value: '',
+  style: {},
+};
+
 describe('SearchBar Component', () => {
   describe('renders', () => {
     it('renders without props', () => {
@@ -12,7 +19,7 @@ describe('SearchBar Component', () => {
     });
 
     it('renders with props', () => {
-      const rendered = shallow(<SearchBar onChange={jest.fn} onSearch={jest.fn} />);
+      const rendered = shallow(<SearchBar {...props} />);
       expect(rendered).toMatchSnapshot();
     });
   });
@@ -20,7 +27,7 @@ describe('SearchBar Component', () => {
   describe('props', () => {
     it('should call onSearch when click on Button', () => {
       const callback = spy();
-      const wrapper = mount(<SearchBar onSearch={callback} />);
+      const wrapper = mount(<SearchBar {...props} onSearch={callback} />);
 
       wrapper.find('button').simulate('click');
 
@@ -29,7 +36,7 @@ describe('SearchBar Component', () => {
 
     it('should call onChange when input change', () => {
       const callback = spy();
-      const wrapper = mount(<SearchBar onChange={callback} />);
+      const wrapper = mount(<SearchBar {...props} onChange={callback} />);
       const input = wrapper.find('input[name="search"]');
 
       input.simulate('change', { target: { value: 'keyword', name: 'search' } });
@@ -42,13 +49,13 @@ describe('SearchBar Component', () => {
 
   describe('content', () => {
     it('should contain a input field', () => {
-      const wrapper = mount(<SearchBar onSearch={jest.fn} />);
+      const wrapper = mount(<SearchBar {...props} />);
 
       expect(wrapper.find('input')).toHaveLength(1);
     });
 
     it('should contain a button', () => {
-      const wrapper = mount(<SearchBar onSearch={jest.fn} />);
+      const wrapper = mount(<SearchBar {...props} />);
 
       expect(wrapper.find('button')).toHaveLength(1);
     });
