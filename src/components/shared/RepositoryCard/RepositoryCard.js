@@ -64,11 +64,5 @@ RepositoryCard.propTypes = {
   stars: PropTypes.number,
 };
 
-RepositoryCard.defaultProps = {
-  title: 'Lorem Pixel 😅',
-  description: 'Lorem Pixel Dolor asit emer.',
-  stars: 0,
-};
-
 export default RepositoryCard;
 
