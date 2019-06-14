@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import { Home, Search } from '../screens';
+import { User, Search } from '../screens';
 
 export default () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/home" component={Home} />
-      <Route path="/" component={Search} />
+      <Route exact path="/" component={Search} />
+      <Route path="/users/:id/repos" component={User} />
     </Switch>
   </BrowserRouter>
 );
