@@ -37,10 +37,12 @@ const Container = styled.div`
 
 Logo.propTypes = {
   headerMode: PropTypes.bool,
+  style: PropTypes.object,
 };
 
 Logo.defaultProps = {
   headerMode: false,
+  style: {},
 };
 
 export default Logo;

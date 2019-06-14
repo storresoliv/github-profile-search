@@ -9,16 +9,20 @@ class SearchBar extends React.Component {
   static propTypes = {
     onSearch: PropTypes.func,
     onChange: PropTypes.func,
+    value: PropTypes.string,
+    style: PropTypes.object,
   }
 
   static defaultProps = {
     onSearch: () => null,
     onChange: () => null,
+    value: '',
+    style: {},
   };
 
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = { value: props.value };
   }
 
   onChange = (e) => {
@@ -38,7 +42,7 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container style={this.props.style}>
         <Field
           name="search"
           type="search"
