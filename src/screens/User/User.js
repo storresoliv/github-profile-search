@@ -25,28 +25,6 @@ const profileProps = {
   },
 };
 
-const repositories = [
-  {title: 'Death Star', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'Vader’s Armour', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'How to kill Obi-Wan', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'lorem pixel one', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'Vader’s Armour', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'Vader’s Armour', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'Vader’s Armour', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'Vader’s Armour', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'Vader’s Armour', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'How to kill Obi-Wan', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'lorem pixel one', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'How to kill Obi-Wan', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'lorem pixel one', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'How to kill Obi-Wan', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'lorem pixel one', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'How to kill Obi-Wan', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'lorem pixel one', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'How to kill Obi-Wan', description: 'lorem pixel dolor amet alid.', stars: 123},
-  {title: 'lorem pixel one', description: 'lorem pixel dolor amet alid.', stars: 123},
-];
-
 class User extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -147,7 +125,11 @@ class User extends React.Component {
 
   renderRepositories = () => (
     <List>
-      { this.state.data.length }
+      {
+        utils.parseUserRepositories(this.state.data).map(repo => (
+          <RepositoryCard {...repo} key={repo.title} />
+        ))
+      }
     </List>
   );
 
@@ -172,8 +154,12 @@ class User extends React.Component {
       : this.renderContainer()
 
   render() {
-    const { fetching, error, data, loading } = this.state;
-    console.log(data)
+    const {
+      fetching,
+      error,
+      loading,
+      data,
+    } = this.state;
 
     return (
       <Page>

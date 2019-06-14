@@ -5,9 +5,11 @@ import PropTypes from 'prop-types';
 import StarIcon from '../../../assets/images/star-icon.svg';
 import colors from '../../../setup/colors';
 
-const RepositoryCard = ({ title, description, stars }) => (
+const RepositoryCard = ({
+  url, title, description, stars,
+}) => (
   <Container>
-    <Title>{title}</Title>
+    <Title href={url} target="_blank">{title}</Title>
     <Description>{description}</Description>
     <StarsContainer>
       <img src={StarIcon} alt="Repository Star Icon" />
@@ -27,11 +29,12 @@ const Container = styled.div`
   margin-bottom: 30px;
 `;
 
-const Title = styled.p`
+const Title = styled.a`
   font-family: 'Raleway';
   font-size: 35px;
-  color: ${colors.purple}
+  color: ${colors.purple};
   margin: 0;
+  text-decoration: none;
 `;
 
 const Description = styled.p`
@@ -61,6 +64,7 @@ const Stars = styled.span`
 
 RepositoryCard.propTypes = {
   title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   stars: PropTypes.number.isRequired,
 };
