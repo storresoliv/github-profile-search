@@ -12,19 +12,6 @@ import UserNotFound from '../../components/shared/UserNotFound';
 
 import * as utils from '../../utils';
 
-const profileProps = {
-  image: 'https://picsum.photos/id/1/280/280',
-  user: {
-    name: 'Felipe Sousa',
-    username: 'felipesousa',
-    organization: 'felipzsousa',
-    location: 'Tatooine',
-    starCount: 800,
-    repositoriesCount: 92,
-    followersCount: 342,
-  },
-};
-
 class User extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -39,6 +26,9 @@ class User extends React.Component {
     super(props);
     this.state = {
       data: [],
+      profile: {
+        starCount: null,
+      },
       value: props.location.state.user,
       loading: false,
       fetching: false,
@@ -47,7 +37,8 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserData();
+    this.getUserProfile();
+    this.getUserRepositories();
   }
 
   onChange = value => this.setState({ value });
@@ -55,10 +46,27 @@ class User extends React.Component {
   onSearch = (value) => {
     this.props.history.replace(`/users/${value}/repos`, { user: value });
     this.setState({ data: [] });
-    this.getUserData();
+
+    this.getUserProfile();
+    this.getUserRepositories();
   }
 
-  getUserData = async (nextUrl) => {
+  getUserProfile = async () => {
+    try {
+      this.setState({ profile: null, fetching: true });
+
+      const { value: user } = this.state;
+      const response = await fetch(`https://api.github.com/users/${user}`);
+      const data = await response.json();
+      const profile = utils.parseUserProfile(data);
+
+      this.setState({ profile, fetching: false });
+    } catch (e) {
+      throw new Error(e.toString());
+    }
+  }
+
+  getUserRepositories = async (nextUrl) => {
     try {
       const { value, loading } = this.state;
       this.setState({ fetching: true });
@@ -67,7 +75,6 @@ class User extends React.Component {
       if (nextUrl) this.setState({ error: false });
 
       const url = nextUrl || `https://api.github.com/users/${value}/repos?per_page=100`;
-
       const response = await fetch(url);
       const hasNext = utils.hasNextPage(response.headers.get('Link'));
       const responseData = await response.json();
@@ -77,16 +84,33 @@ class User extends React.Component {
         this.removeLoader();
       } else {
         const data = this.state.data.concat(responseData);
+        const { stargazers_count: starCount } = utils.parseProfileStarCount(data);
 
-        this.setState({ data, error: false });
+        this.setState({
+          data,
+          error: false,
+          profile: {
+            ...this.state.profile,
+            starCount,
+          },
+        });
         this.removeLoader();
       }
 
       if (hasNext) {
         this.setState({ error: false });
-        await this.getUserData(hasNext);
+        await this.getUserRepositories(hasNext);
       } else if (hasNext && !responseData.message) {
-        this.setState({ data: this.state.data.concat(responseData) });
+        const moreData = this.state.data.concat(responseData);
+        const { stargazers_count: starCount } = utils.parseProfileStarCount(moreData);
+
+        this.setState({
+          data: moreData,
+          profile: {
+            ...this.state.profile,
+            starCount,
+          },
+        });
         this.removeLoader();
       }
 
@@ -101,6 +125,8 @@ class User extends React.Component {
   addLoader = () => this.setState({ loading: true });
 
   removeLoader = () => setTimeout(() => this.setState({ loading: false }), 1000);
+
+  renderLoader = () => <Loader />;
 
   renderHeader = () => (
     <Header>
@@ -119,9 +145,8 @@ class User extends React.Component {
     </Header>
   );
 
-  renderSidebar = () => (
-    <Profile {...profileProps} />
-  );
+
+  renderSidebar = profile => <Profile {...profile} />;
 
   renderRepositories = () => (
     <List>
@@ -131,12 +156,12 @@ class User extends React.Component {
         ))
       }
     </List>
-  );
+  )
 
-  renderContainer = () => (
+  renderContainer = (data, profile) => (
     <Container>
-      {this.renderSidebar()}
-      {this.renderRepositories()}
+      {this.renderSidebar(profile)}
+      {this.renderRepositories(data)}
     </Container>
   );
 
@@ -144,21 +169,20 @@ class User extends React.Component {
     <ContainerError>
       <UserNotFound />
     </ContainerError>
-  )
+  );
 
-  renderLoader = () => <Loader />;
-
-  renderContentPage = error => // eslint-disable-line
+  renderContentPage = (data, profile, error) => // eslint-disable-line
     error
       ? this.renderError()
-      : this.renderContainer()
+      : this.renderContainer(data, profile)
 
   render() {
     const {
+      data,
+      profile,
       fetching,
       error,
       loading,
-      data,
     } = this.state;
 
     return (
@@ -167,7 +191,7 @@ class User extends React.Component {
         {
           loading || fetching
             ? this.renderLoader()
-            : this.renderContentPage(error)
+            : this.renderContentPage(data, profile, error)
         }
       </Page>
     );

@@ -12,15 +12,13 @@ import colors from '../../../setup/colors';
 
 const Profile = ({
   image,
-  user: {
-    name,
-    username,
-    organization,
-    location,
-    starCount,
-    repositoriesCount,
-    followersCount,
-  },
+  name,
+  username,
+  organization,
+  location,
+  starCount,
+  repositoriesCount,
+  followersCount,
 }) => (
   <Container>
     <Header>
@@ -107,15 +105,13 @@ const UserName = GroupLabel;
 
 Profile.propTypes = {
   image: PropTypes.string.isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    username: PropTypes.string,
-    organization: PropTypes.string,
-    location: PropTypes.string,
-    starCount: PropTypes.number,
-    repositoriesCount: PropTypes.number,
-    followersCount: PropTypes.number,
-  }).isRequired,
+  name: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  organization: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  starCount: PropTypes.number.isRequired,
+  repositoriesCount: PropTypes.number.isRequired,
+  followersCount: PropTypes.number.isRequired,
 };
 
 export default Profile;
