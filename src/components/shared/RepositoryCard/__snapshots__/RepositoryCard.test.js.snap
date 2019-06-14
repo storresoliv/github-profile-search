@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RepositoryCard Component renders renders with props 1`] = `ShallowWrapper {}`;
+
+exports[`RepositoryCard Component renders renders without props 1`] = `ShallowWrapper {}`;

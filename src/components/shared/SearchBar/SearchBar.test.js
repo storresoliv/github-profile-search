@@ -25,7 +25,7 @@ describe('SearchBar Component', () => {
       wrapper.find('button').simulate('click');
 
       expect(callback.called).toBe(true);
-    })
+    });
 
     it('should call onChange when input change', () => {
       const callback = spy();
