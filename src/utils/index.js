@@ -3,7 +3,7 @@ import isNull from 'lodash.isnull';
 
 const parseHeader = headers => parse(headers);
 
-function hasNextPage(headers) {
+const hasNextPage = (headers) => {
   let next;
   const h = parseHeader(headers);
   if (isNull(h)) return false;
@@ -15,7 +15,7 @@ function hasNextPage(headers) {
   }
 
   return next;
-}
+};
 
 export {
   parseHeader,

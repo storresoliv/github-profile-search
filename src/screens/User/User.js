@@ -63,6 +63,7 @@ class User extends React.Component {
       data: [],
       value: props.location.state.user,
       loading: false,
+      fetching: false,
       error: null,
     };
   }
@@ -75,63 +76,43 @@ class User extends React.Component {
 
   onSearch = (value) => {
     this.props.history.replace(`/users/${value}/repos`, { user: value });
+    this.setState({ data: [] });
     this.getUserData();
   }
 
-  getMoreData = async (url) => {
+  getUserData = async (nextUrl) => {
     try {
+      const { value, loading } = this.state;
+      this.setState({ fetching: true });
+
+      if (!loading) this.addLoader();
+      if (nextUrl) this.setState({ error: false });
+
+      const url = nextUrl || `https://api.github.com/users/${value}/repos?per_page=100`;
+
       const response = await fetch(url);
       const hasNext = utils.hasNextPage(response.headers.get('Link'));
-      const data = await response.json();
+      const responseData = await response.json();
 
-      if (data.message) {
-        this.setState({ error: true });
+      if (responseData.message) {
+        this.setState({ error: true, data: this.state.data });
         this.removeLoader();
       } else {
-        const more = [
-          ...this.state.data,
-          ...data,
-        ];
+        const data = this.state.data.concat(responseData);
 
-        this.setState({ data: more, error: false });
+        this.setState({ data, error: false });
         this.removeLoader();
       }
 
       if (hasNext) {
-        await this.getMoreData(hasNext);
-      } else {
-        this.setState({ data: this.state.data });
+        this.setState({ error: false });
+        await this.getUserData(hasNext);
+      } else if (hasNext && !responseData.message) {
+        this.setState({ data: this.state.data.concat(responseData) });
         this.removeLoader();
       }
-    } catch (e) {
-      this.setState({ error: true });
-      this.removeLoader();
-      throw new Error(e.toString());
-    }
-  }
 
-  getUserData = async () => {
-    try {
-      this.addLoader();
-
-      const { value } = this.state;
-
-      const response = await fetch(`https://api.github.com/users/${value}/repos?per_page=100`);
-      const hasNext = utils.hasNextPage(response.headers.get('Link'));
-      const data = await response.json();
-
-      if (data.message) {
-        this.setState({ error: true });
-        this.removeLoader();
-      } else {
-        this.setState({ error: false, data });
-      }
-
-      if (hasNext) {
-        await this.getMoreData(hasNext);
-      } else {
-        this.removeLoader();
-      }
+      this.setState({ fetching: false });
     } catch (e) {
       this.setState({ error: true });
       this.removeLoader();
@@ -164,16 +145,16 @@ class User extends React.Component {
     <Profile {...profileProps} />
   );
 
-  renderContent = () => (
+  renderRepositories = () => (
     <List>
-      { repositories.map(repository => <RepositoryCard {...repository} />) }
+      { this.state.data.length }
     </List>
   );
 
   renderContainer = () => (
     <Container>
       {this.renderSidebar()}
-      {this.renderContent()}
+      {this.renderRepositories()}
     </Container>
   );
 
@@ -185,19 +166,22 @@ class User extends React.Component {
 
   renderLoader = () => <Loader />;
 
+  renderContentPage = error => // eslint-disable-line
+    error
+      ? this.renderError()
+      : this.renderContainer()
+
   render() {
-    const { error, loading } = this.state;
+    const { fetching, error, data, loading } = this.state;
+    console.log(data)
+
     return (
       <Page>
         {this.renderHeader()}
         {
-          loading // eslint-disable-line
+          loading || fetching
             ? this.renderLoader()
-            : (
-              error
-                ? this.renderError()
-                : this.renderContainer()
-            )
+            : this.renderContentPage(error)
         }
       </Page>
     );
