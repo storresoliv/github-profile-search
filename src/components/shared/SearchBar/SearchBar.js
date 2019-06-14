@@ -62,7 +62,7 @@ class SearchBar extends React.Component {
           value={this.state.value}
           disabled={this.state.disabled}
         />
-        <Button onClick={this.onSearch} disabled={this.state.disabled}>
+        <Button type="submit" onClick={this.onSearch} disabled={this.state.disabled}>
           <img src={SearchIcon} alt="Search Icon" />
         </Button>
       </Container>

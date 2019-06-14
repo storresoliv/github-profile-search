@@ -16,6 +16,7 @@ const Container = styled.div`
   width: 415px;
   height: 81px;
   font-size: 60px;
+  cursor: pointer;
 
   ${props => props.headerMode && css`
     width: 280px;
