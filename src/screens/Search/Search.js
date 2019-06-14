@@ -10,7 +10,7 @@ import colors from '../../setup/colors';
 
 export class Search extends React.Component {
   static propTypes = {
-    history: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
   }
 
   constructor(props) {

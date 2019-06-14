@@ -2,7 +2,6 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { isNull } from 'lodash';
 
 import Logo from '../../components/shared/Logo';
 import Loader from '../../components/shared/Loader';
@@ -10,6 +9,8 @@ import SearchBar from '../../components/shared/SearchBar';
 import RepositoryCard from '../../components/shared/RepositoryCard';
 import Profile from '../../components/shared/Profile';
 import UserNotFound from '../../components/shared/UserNotFound';
+
+import * as utils from '../../utils';
 
 const profileProps = {
   image: 'https://picsum.photos/id/1/280/280',
@@ -48,7 +49,7 @@ const repositories = [
 
 class User extends React.Component {
   static propTypes = {
-    history: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
     location: PropTypes.shape({
       state: PropTypes.shape({
         user: PropTypes.string,
@@ -59,6 +60,7 @@ class User extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       value: props.location.state.user,
       loading: false,
       error: null,
@@ -66,36 +68,80 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    this.getUser();
+    this.getUserData();
   }
 
   onChange = value => this.setState({ value });
 
   onSearch = (value) => {
-    this.props.history.replace(`/users/${value}/repos`);
-    this.getUser();
+    this.props.history.replace(`/users/${value}/repos`, { user: value });
+    this.getUserData();
   }
 
-  getUser = async () => {
+  getMoreData = async (url) => {
     try {
-      this.setState({ loading: true });
+      const response = await fetch(url);
+      const hasNext = utils.hasNextPage(response.headers.get('Link'));
+      const data = await response.json();
+
+      if (data.message) {
+        this.setState({ error: true });
+        this.removeLoader();
+      } else {
+        const more = [
+          ...this.state.data,
+          ...data,
+        ];
+
+        this.setState({ data: more, error: false });
+        this.removeLoader();
+      }
+
+      if (hasNext) {
+        await this.getMoreData(hasNext);
+      } else {
+        this.setState({ data: this.state.data });
+        this.removeLoader();
+      }
+    } catch (e) {
+      this.setState({ error: true });
+      this.removeLoader();
+      throw new Error(e.toString());
+    }
+  }
+
+  getUserData = async () => {
+    try {
+      this.addLoader();
 
       const { value } = this.state;
 
-      const response = await fetch(`https://api.github.com/users/${value}/repos`);
+      const response = await fetch(`https://api.github.com/users/${value}/repos?per_page=100`);
+      const hasNext = utils.hasNextPage(response.headers.get('Link'));
       const data = await response.json();
 
-      if (data.message === 'Not Found') {
+      if (data.message) {
         this.setState({ error: true });
+        this.removeLoader();
       } else {
-        this.setState({ error: false });
+        this.setState({ error: false, data });
+      }
+
+      if (hasNext) {
+        await this.getMoreData(hasNext);
+      } else {
+        this.removeLoader();
       }
     } catch (e) {
+      this.setState({ error: true });
+      this.removeLoader();
       throw new Error(e.toString());
-    } finally {
-      setTimeout(() => this.setState({ loading: false }), 1000);
     }
   }
+
+  addLoader = () => this.setState({ loading: true });
+
+  removeLoader = () => setTimeout(() => this.setState({ loading: false }), 1000);
 
   renderHeader = () => (
     <Header>
