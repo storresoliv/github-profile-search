@@ -84,7 +84,7 @@ class User extends React.Component {
         this.removeLoader();
       } else {
         const data = this.state.data.concat(responseData);
-        const { stargazers_count: starCount } = utils.parseProfileStarCount(data);
+        const starCount = utils.parseProfileStarCount(data);
 
         this.setState({
           data,
@@ -102,7 +102,7 @@ class User extends React.Component {
         await this.getUserRepositories(hasNext);
       } else if (hasNext && !responseData.message) {
         const moreData = this.state.data.concat(responseData);
-        const { stargazers_count: starCount } = utils.parseProfileStarCount(moreData);
+        const starCount = utils.parseProfileStarCount(moreData);
 
         this.setState({
           data: moreData,

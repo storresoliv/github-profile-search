@@ -48,8 +48,13 @@ const parseUserRepositories = (data) => {
   return sorted;
 };
 
+const parseStars = s =>
+  s.toLocaleString('pt-BR', { maximumFractionDigits: 2 }).replace(',', '.');
+
 const parseProfileStarCount = repos =>
-  repos.reduce((p, c) => ({ stargazers_count: p.stargazers_count + c.stargazers_count }));
+  parseStars(repos.reduce((p, c) => ({
+    stargazers_count: p.stargazers_count + c.stargazers_count,
+  })).stargazers_count);
 
 export {
   parseHeader,
@@ -57,5 +62,6 @@ export {
   parseUserRepositories,
   parseUserProfile,
   parseProfileStarCount,
+  parseStars,
 };
 
