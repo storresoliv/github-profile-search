@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import Profile from '.';
 
-const stories = storiesOf('shared/Profile', module);
+const stories = storiesOf('components/Profile', module);
 
 const props = {
   image: 'https://picsum.photos/id/1/280/280',
@@ -10,7 +10,7 @@ const props = {
   username: 'felipesousa',
   organization: 'felipzsousa',
   location: 'Tatooine',
-  starCount: 800,
+  starCount: '800',
   repositoriesCount: 92,
   followersCount: 342,
 };

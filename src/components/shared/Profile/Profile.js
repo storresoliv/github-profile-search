@@ -109,7 +109,7 @@ Profile.propTypes = {
   username: PropTypes.string.isRequired,
   organization: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
-  starCount: PropTypes.number.isRequired,
+  starCount: PropTypes.string.isRequired,
   repositoriesCount: PropTypes.number.isRequired,
   followersCount: PropTypes.number.isRequired,
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import RepositoryCard from '.';
 
-const stories = storiesOf('shared/RepositoryCard', module);
+const stories = storiesOf('components/RepositoryCard', module);
 
 const props = {
   title: 'Lorem Pixel 😅',

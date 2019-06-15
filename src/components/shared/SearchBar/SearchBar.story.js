@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import SearchBar from '.';
 
-const stories = storiesOf('shared/SearchBar', module);
+const stories = storiesOf('components/SearchBar', module);
 
 const props = {
   style: {},

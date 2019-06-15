@@ -12,7 +12,7 @@ import UserNotFound from '../../components/shared/UserNotFound';
 
 import * as utils from '../../utils';
 
-class User extends React.Component {
+export class User extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
     location: PropTypes.shape({

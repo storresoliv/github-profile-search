@@ -1,12 +1,10 @@
 import { configure } from '@storybook/react';
 
-import sharedStories from './stories/sharedStories';
-import screensStories from './stories/screensStories';
+import componentsStories from './stories/componentsStories';
 import '../src/index.css';
 
 function loadStories() {
-  sharedStories();
-  screensStories();
+  componentsStories();
 }
 
 configure(loadStories, module);

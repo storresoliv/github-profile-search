@@ -9,7 +9,7 @@ const props = {
   username: 'felipesousa',
   organization: 'felipzsousa',
   location: 'Tatooine',
-  starCount: 800,
+  starCount: '800',
   repositoriesCount: 92,
   followersCount: 342,
 };
@@ -32,7 +32,6 @@ describe('Profile Component', () => {
     it('should contain 1 paragraph', () => {
       expect(wrapper.find('p')).toHaveLength(1);
     });
-
 
     it('should contain 6 spans', () => {
       expect(wrapper.find('span')).toHaveLength(6);
