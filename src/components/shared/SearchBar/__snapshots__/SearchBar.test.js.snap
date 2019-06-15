@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBar Component renders renders with props 1`] = `ShallowWrapper {}`;
+
+exports[`SearchBar Component renders renders without props 1`] = `ShallowWrapper {}`;
