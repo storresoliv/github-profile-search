@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:200,300,400&display=swap');
 
+@font-face{
+  font-family: 'Monaco';
+  src: url('./assets/fonts/Monaco.ttf')
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -8,12 +13,14 @@ body {
   background-color: #FFFFFF;
 }
 
+
 @keyframes BouncingLoader {
   to {
     opacity: -1.1;
     transform: translate2d(0, -1rem, 0);
   }
 }
+
 
 .bouncing-loader {
   display: flex;
